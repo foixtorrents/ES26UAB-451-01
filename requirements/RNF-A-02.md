@@ -4,7 +4,7 @@
 RNF-A-02
 
 ### Type/Category:
-Funcional
+No Funcional / Decisions de Disseny
 
 ### Version:
 1.0
