@@ -16,7 +16,7 @@ Disponibilitat en plataformes Web i Mòbil
 Com a decisió d'arquitectura, el sistema ha de ser multiplataforma, oferint una versió específica per a navegadors web i una aplicació dedicada per a dispositius mòbils.
 
 ### Relations:
-- [RF-A-03](RF-A-03.md), [RF-A-10](RF-A-10.md)
+- [RNF-A-03](RNF-A-03.md), [RNF-A-10](RNF-A-10.md)
 
 ### Comments:
 L'arquitectura ha de permetre la sincronització total entre les dues versions.
