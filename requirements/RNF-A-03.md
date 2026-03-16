@@ -16,7 +16,7 @@ Compatibilitat amb sistemes operatius mòbils (Android/iOS)
 La variant mòbil de la plataforma ha de garantir la compatibilitat i un funcionament òptim tant en el sistema operatiu Android com en iOS, assegurant l'execució en les versions de mercat més utilitzades.
 
 ### Relations:
-[RF-A-02](RF-A-02.md)
+[RNF-A-02](RNF-A-02.md)
 
 ### Comments:
 ---
