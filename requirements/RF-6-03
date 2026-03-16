@@ -1,0 +1,22 @@
+# Requirement
+
+### ID:
+RF-6-03
+
+### Type/Category:
+Funcional
+
+### Version:
+1.0
+
+### Title:
+Acceptar comandes
+
+### Description:
+Els cuiners han de poder acceptar les comandes de plats proposats pels clients.
+
+### Relations:
+- [RF-6-04](RF-6-04.md)
+
+### Comments:
+---
