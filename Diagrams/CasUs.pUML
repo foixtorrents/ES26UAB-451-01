@@ -1,0 +1,62 @@
+@startuml
+left to right direction
+
+actor "Usuari no registrat" as UNR
+actor "Usuari registrat" as UR
+actor "Client" as C
+actor "Cuiner" as CU
+actor "Repartidor" as R
+
+rectangle "QueMenges" {
+  usecase "Registrar-se" as UC1
+  usecase "Iniciar sessió" as UC2
+  usecase "Consultar plats i cuiners" as UC13
+
+  usecase "Gestionar/eliminar perfil" as UC3
+
+  usecase "Realitzar comanda" as UC6
+  usecase "Consultar historial de comandes" as UC7
+  usecase "Subscriure's al pla mensual" as UC8
+
+  usecase "Gestionar comandes i propostes" as UC9
+  usecase "Indicar disponibilitat" as UC10
+
+  usecase "Gestionar entregues" as UC11
+  usecase "Indicar horari disponible" as UC12
+
+
+  usecase "Afegir/editar/eliminar plats i menús" as UC14
+}
+
+actor "Gmail / Outlook" as MAIL
+actor "Sistema de pagament" as PAG
+actor "Google Maps" as MAPS
+
+UR <|-- C
+UR <|-- CU
+UR <|-- R
+
+UNR --> UC1
+UNR --> UC2
+UNR --> UC13
+
+UR --> UC3
+
+C --> UC13
+C --> UC6
+C --> UC7
+C --> UC8
+
+CU --> UC9
+CU --> UC10
+CU --> UC14
+
+R --> UC11
+R --> UC12
+
+UC1 --> MAIL
+UC2 --> MAIL
+UC6 --> PAG
+UC6 --> MAPS
+
+@enduml
