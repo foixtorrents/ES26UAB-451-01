@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <title>QueMenges - Plats</title>
+    <style>
+        body { font-family: 'Calibri', sans-serif; background-color: #f9f9f9; padding: 20px; }
+        h1 { color: #ff6600; }
+        .plat-card { background: white; padding: 15px; margin-bottom: 10px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .preu { font-weight: bold; color: #333; }
+    </style>
+</head>
+<body>
+    <h1>Llistat de Plats i Cuiners (UC13)</h1>
+    <div>
+        <% llistatPlats.forEach(function(plat) { %>
+            <div class="plat-card">
+                <h2><%= plat.nom %></h2>
+                <p>Cuiner: <%= plat.cuiner %></p>
+                <p class="preu"><%= plat.preu.toFixed(2) %> €</p>
+            </div>
+        <% }); %>
+    </div>
+</body>
+</html>
