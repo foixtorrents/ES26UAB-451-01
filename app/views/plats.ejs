@@ -4,22 +4,48 @@
     <meta charset="UTF-8">
     <title>QueMenges - Plats</title>
     <style>
-        body { font-family: 'Calibri', sans-serif; background-color: #f9f9f9; padding: 20px; }
+        body { font-family: 'Calibri', sans-serif; background-color: #f9f9f9; padding: 20px; max-width: 800px; margin: auto; }
         h1 { color: #ff6600; }
         .plat-card { background: white; padding: 15px; margin-bottom: 10px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-        .preu { font-weight: bold; color: #333; }
+        .preu { font-weight: bold; color: #333; font-size: 1.2em; }
+        .allergens { color: #d9534f; font-size: 0.9em; }
+        .buscador { background: white; padding: 15px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        input, select, button { padding: 8px; margin-right: 10px; border: 1px solid #ccc; border-radius: 4px; }
+        button { background-color: #ff6600; color: white; border: none; cursor: pointer; font-weight: bold; }
     </style>
 </head>
 <body>
     <h1>Llistat de Plats i Cuiners (UC13)</h1>
+    
+    <div class="buscador">
+        <form action="/plats" method="GET">
+            <input type="text" name="cerca" placeholder="Cerca per nom o cuiner..." value="<%= textCerca %>">
+            
+            <select name="excloureAllergen">
+                <option value="">Filtre: Tots els plats</option>
+                <option value="Gluten" <%= allergenExclos === 'Gluten' ? 'selected' : '' %>>Sense Gluten</option>
+                <option value="Lactosa" <%= allergenExclos === 'Lactosa' ? 'selected' : '' %>>Sense Lactosa</option>
+                <option value="Marisc" <%= allergenExclos === 'Marisc' ? 'selected' : '' %>>Sense Marisc</option>
+            </select>
+            
+            <button type="submit">Cercar i Filtrar</button>
+            <a href="/plats" style="text-decoration: none; color: #666; font-size: 0.9em;">Netejar filtres</a>
+        </form>
+    </div>
+
     <div>
-        <% llistatPlats.forEach(function(plat) { %>
-            <div class="plat-card">
-                <h2><%= plat.nom %></h2>
-                <p>Cuiner: <%= plat.cuiner %></p>
-                <p class="preu"><%= plat.preu.toFixed(2) %> €</p>
-            </div>
-        <% }); %>
+        <% if (llistatPlats.length === 0) { %>
+            <p>No s'han trobat plats que coincideixin amb la cerca.</p>
+        <% } else { %>
+            <% llistatPlats.forEach(function(plat) { %>
+                <div class="plat-card">
+                    <h2><%= plat.nom %></h2>
+                    <p>👨‍🍳 Cuiner: <%= plat.cuiner %></p>
+                    <p class="allergens">⚠️ Al·lèrgens: <%= plat.allergens.length > 0 ? plat.allergens.join(', ') : 'Cap' %></p>
+                    <p class="preu"><%= plat.preu.toFixed(2) %> €</p>
+                </div>
+            <% }); %>
+        <% } %>
     </div>
 </body>
 </html>
