@@ -1,0 +1,36 @@
+@startuml
+skinparam SequenceMessageAlign center
+skinparam monochrome true
+skinparam shadowing false
+
+actor Cuiner
+boundary PantallaGestioCuina <<boundary>>
+control GestorUsuaris <<control>>
+entity Cuiner_Entity <<entity>>
+
+autonumber
+
+== Indicar disponibilitat: Actualització d'estat ==
+Cuiner -> PantallaGestioCuina : canviarDisponibilitat(nouEstat, horaTornada)
+activate PantallaGestioCuina
+PantallaGestioCuina -> GestorUsuaris : actualitzarEstatCuiner(nouEstat, horaTornada)
+activate GestorUsuaris
+
+GestorUsuaris -> Cuiner_Entity : setDisponibilitat(nouEstat)
+activate Cuiner_Entity
+Cuiner_Entity --> GestorUsuaris : exit
+deactivate Cuiner_Entity
+
+GestorUsuaris -> Cuiner_Entity : setHoraTornada(horaTornada)
+activate Cuiner_Entity
+Cuiner_Entity --> GestorUsuaris : exit
+deactivate Cuiner_Entity
+
+GestorUsuaris --> PantallaGestioCuina : exit
+deactivate GestorUsuaris
+
+PantallaGestioCuina -> PantallaGestioCuina : mostrarDisponibilitatActualitzada()
+note right: L'estat és visible instantàniament pels clients
+deactivate PantallaGestioCuina
+
+@enduml

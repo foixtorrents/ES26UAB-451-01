@@ -21,9 +21,9 @@ rectangle "QueMenges" {
   usecase "Gestionar comandes i propostes" as UC9
   usecase "Indicar disponibilitat" as UC10
 
-  usecase "Gestionar entregues" as UC11
+  usecase "Acceptar comanda" as UC11
+  usecase "Marcar com a lliurat" as UC15
   usecase "Indicar horari disponible" as UC12
-
 
   usecase "Afegir/editar/eliminar plats i menús" as UC14
 }
@@ -52,11 +52,14 @@ CU --> UC10
 CU --> UC14
 
 R --> UC11
+R --> UC15
 R --> UC12
 
 UC1 --> MAIL
 UC2 --> MAIL
+UC15 --> MAIL
 UC6 --> PAG
 UC6 --> MAPS
+UC11 --> MAPS
 
 @enduml

@@ -1,0 +1,36 @@
+@startuml
+skinparam SequenceMessageAlign center
+skinparam monochrome true
+skinparam shadowing false
+
+actor Client
+boundary PantallaSessio <<boundary>>
+control GestorUsuaris <<control>>
+entity Client_Entity <<entity>>
+
+autonumber
+
+== Subscriure's al pla: Alta Premium ==
+Client -> PantallaSessio : subscriurePlaMensual(dadesPagament)
+activate PantallaSessio
+PantallaSessio -> GestorUsuaris : processarAltaSubscripcio(dadesPagament)
+activate GestorUsuaris
+
+GestorUsuaris -> Client_Entity : activarPlaPremium()
+activate Client_Entity
+Client_Entity --> GestorUsuaris : exit
+deactivate Client_Entity
+
+GestorUsuaris -> Client_Entity : activarMonederPunts()
+activate Client_Entity
+Client_Entity --> GestorUsuaris : exit
+deactivate Client_Entity
+
+GestorUsuaris --> PantallaSessio : exit
+deactivate GestorUsuaris
+
+PantallaSessio -> PantallaSessio : mostrarSubscripcioActiva()
+note right: Mostra els nous avantatges al perfil del client
+deactivate PantallaSessio
+
+@enduml

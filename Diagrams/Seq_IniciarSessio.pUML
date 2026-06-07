@@ -1,0 +1,32 @@
+@startuml
+skinparam SequenceMessageAlign center
+skinparam monochrome true
+skinparam shadowing false
+
+actor Usuari
+boundary PantallaSessio <<boundary>>
+control GestorUsuaris <<control>>
+entity Usuari_Entity <<entity>>
+boundary ServeiCorreuExtern <<boundary>>
+
+autonumber
+
+== Iniciar Sessió: Validació de credencials ==
+Usuari -> PantallaSessio : iniciarSessio(correu, contrasenya)
+activate PantallaSessio
+PantallaSessio -> GestorUsuaris : validarCredencials(correu, contrasenya)
+activate GestorUsuaris
+
+GestorUsuaris -> Usuari_Entity : comprovarDades(correu, contrasenya)
+activate Usuari_Entity
+Usuari_Entity --> GestorUsuaris : exit
+deactivate Usuari_Entity
+
+GestorUsuaris --> PantallaSessio : exit
+deactivate GestorUsuaris
+
+PantallaSessio -> PantallaSessio : mostrarIniciSessioCorrecte()
+note right: Redirigeix a la interfície segons el rol de l'usuari
+deactivate PantallaSessio
+
+@enduml

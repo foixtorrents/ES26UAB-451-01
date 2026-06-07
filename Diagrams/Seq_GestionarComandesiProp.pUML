@@ -1,0 +1,49 @@
+@startuml
+skinparam SequenceMessageAlign center
+skinparam monochrome true
+skinparam shadowing false
+
+actor Cuiner
+boundary PantallaGestioCuina <<boundary>>
+control GestorComandes <<control>>
+entity Comanda <<entity>>
+
+autonumber
+
+== Gestionar comandes: Acceptar i Preparar ==
+Cuiner -> PantallaGestioCuina : acceptarComandaEntrant(idComanda)
+activate PantallaGestioCuina
+PantallaGestioCuina -> GestorComandes : confirmarPreparacio(idComanda)
+activate GestorComandes
+
+GestorComandes -> Comanda : actualitzarEstat("Preparant")
+activate Comanda
+Comanda --> GestorComandes : exit
+deactivate Comanda
+
+GestorComandes --> PantallaGestioCuina : exit
+deactivate GestorComandes
+
+PantallaGestioCuina -> PantallaGestioCuina : mostrarComandaEnPreparacio()
+deactivate PantallaGestioCuina
+
+autonumber 6
+== Gestionar comandes: Plat llest ==
+Cuiner -> PantallaGestioCuina : marcarLlestPerRecollir(idComanda)
+activate PantallaGestioCuina
+PantallaGestioCuina -> GestorComandes : finalitzarPreparacio(idComanda)
+activate GestorComandes
+
+GestorComandes -> Comanda : actualitzarEstat("Llest per recollir")
+activate Comanda
+Comanda --> GestorComandes : exit
+deactivate Comanda
+
+GestorComandes --> PantallaGestioCuina : exit
+deactivate GestorComandes
+
+PantallaGestioCuina -> PantallaGestioCuina : mostrarComandaAEnviament()
+note right: La comanda passa a l'operativa logística
+deactivate PantallaGestioCuina
+
+@enduml

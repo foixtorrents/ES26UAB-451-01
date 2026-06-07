@@ -1,0 +1,31 @@
+@startuml
+skinparam SequenceMessageAlign center
+skinparam monochrome true
+skinparam shadowing false
+
+actor Repartidor
+boundary PantallaGestioEntregues <<boundary>>
+control GestorUsuaris <<control>>
+entity Repartidor_Entity <<entity>>
+
+autonumber
+
+== Indicar horari: Gestió de torns ==
+Repartidor -> PantallaGestioEntregues : guardarConfiguracioHorari(dadesHorari)
+activate PantallaGestioEntregues
+PantallaGestioEntregues -> GestorUsuaris : actualitzarHorariRepartidor(dadesHorari)
+activate GestorUsuaris
+
+GestorUsuaris -> Repartidor_Entity : setFrangesHoraries(dadesHorari)
+activate Repartidor_Entity
+Repartidor_Entity --> GestorUsuaris : exit
+deactivate Repartidor_Entity
+
+GestorUsuaris --> PantallaGestioEntregues : exit
+deactivate GestorUsuaris
+
+PantallaGestioEntregues -> PantallaGestioEntregues : mostrarHorariConfirmat()
+note right: Les franges queden guardades a la base de dades
+deactivate PantallaGestioEntregues
+
+@enduml

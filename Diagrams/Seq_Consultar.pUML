@@ -1,0 +1,56 @@
+@startuml
+skinparam SequenceMessageAlign center
+skinparam monochrome true
+skinparam shadowing false
+
+actor Client
+boundary PantallaCataleg <<boundary>>
+control GestorCataleg <<control>>
+entity Plat <<entity>>
+entity Cuiner <<entity>>
+
+autonumber
+
+== Consultar Catàleg: Exploració i Filtres ==
+Client -> PantallaCataleg : accedirCataleg()
+activate PantallaCataleg
+PantallaCataleg -> GestorCataleg : consultarPlatsICuiners()
+activate GestorCataleg
+
+GestorCataleg -> Cuiner : getCuinersDisponibles()
+activate Cuiner
+Cuiner --> GestorCataleg : llistatCuiners
+deactivate Cuiner
+
+GestorCataleg -> Plat : getLlistatPlats()
+activate Plat
+Plat --> GestorCataleg : llistatPlats
+deactivate Plat
+
+GestorCataleg --> PantallaCataleg : llistatComplet
+deactivate GestorCataleg
+
+PantallaCataleg -> PantallaCataleg : mostrarCatàleg()
+note right: Mostra el llistat ordenat per distància i preferències
+deactivate PantallaCataleg
+
+autonumber 6
+== Consultar Catàleg: Veure detalls ==
+Client -> PantallaCataleg : seleccionarPlat(id)
+activate PantallaCataleg
+PantallaCataleg -> GestorCataleg : consultarDetallPlat(id)
+activate GestorCataleg
+
+GestorCataleg -> Plat : getDetallPlat(id)
+activate Plat
+Plat --> GestorCataleg : detallPlat
+deactivate Plat
+
+GestorCataleg --> PantallaCataleg : detallPlat
+deactivate GestorCataleg
+
+PantallaCataleg -> PantallaCataleg : mostrarDetallAvançat()
+note right: Mostra ingredients, al·lèrgens i imatge
+deactivate PantallaCataleg
+
+@enduml

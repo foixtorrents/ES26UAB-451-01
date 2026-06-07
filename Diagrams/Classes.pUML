@@ -1,0 +1,236 @@
+@startuml
+skinparam monochrome true
+skinparam shadowing false
+skinparam linetype ortho
+top to bottom direction
+skinparam nodesep 70
+skinparam ranksep 80
+hide empty members
+
+package "Interfícies i Serveis Externs" {
+    together {
+        class PantallaSessio <<boundary>> {
+            + registrarUsuari(dadesRegistre)
+            + mostrarRegistreCorrecte()
+            + iniciarSessio(correu, contrasenya)
+            + mostrarIniciSessioCorrecte()
+            + subscriurePlaMensual(dadesPagament)
+            + mostrarSubscripcioActiva()
+            + actualitzarPerfil(novesDades)
+            + mostrarPerfilActualitzat()
+            + eliminarCompte()
+            + mostrarTancamentSessio()
+        }
+        class PantallaComanda <<boundary>> {
+            + accedirHistorial()
+            + mostrarHistorial()
+            + confirmarComanda(dadesComanda, dadesPagament)
+            + mostrarComandaConfirmada()
+        }
+        class PantallaCataleg <<boundary>> {
+            + accedirCataleg()
+            + mostrarCatàleg()
+            + seleccionarPlat(id)
+            + mostrarDetallAvançat()
+        }
+    }
+    
+    together {
+        class PantallaGestioCuina <<boundary>> {
+            + afegirNouPlat(dadesPlat)
+            + mostrarPlatCreat()
+            + canviarDisponibilitat(nouEstat, horaTornada)
+            + mostrarDisponibilitatActualitzada()
+            + acceptarComandaEntrant(idComanda)
+            + mostrarComandaEnPreparacio()
+            + marcarLlestPerRecollir(idComanda)
+            + mostrarComandaAEnviament()
+            + eliminarPlat(idPlat)
+            + mostrarLlistatActualitzat()
+            + guardarCanvisPlat(idPlat, novesDades)
+            + mostrarCanvisGuardats()
+        }
+        class PantallaGestioEntregues <<boundary>> {
+            + guardarConfiguracioHorari(dadesHorari)
+            + mostrarHorariConfirmat()
+            + accedirComandesPendents()
+            + acceptarComanda(id)
+            + iniciarEnviament(id)
+            + comandaEntregada()
+            + mostrarLlistatDetallat()
+            + mostrarConfirmacioAceptacio()
+            + mostrarPestanyaActivesDetall()
+            + mostrarPantallaExit()
+        }
+    }
+
+    together {
+        class ServeiMapaExtern <<boundary>> {
+            + obtenirRutaMapa(origen, desti)
+            + obtenirRutaMapaLive(posicio, adreca)
+            + obtenirUbicacioPunt(adreca)
+        }
+        class ServeiNotificacioExtern <<boundary>> {
+            + notificarEntregaLliurada(idComanda)
+        }
+        class ServeiUbicacioExtern <<boundary>> {
+            + activarStreamPosicioGPS(idComanda, idRepartidor, idClient)
+        }
+        class ServeiPagamentExtern <<boundary>> {
+            + autenticarTransaccio(dadesPagament, preuTotal)
+        }
+        class ServeiCorreuExtern <<boundary>>
+    }
+}
+
+package "Controladors" {
+    together {
+        class GestorUsuaris <<control>> {
+            + crearNouCompte(dadesRegistre)
+            + validarCredencials(correu, contrasenya)
+            + processarAltaSubscripcio(dadesPagament)
+            + actualitzarEstatCuiner(nouEstat, horaTornada)
+            + actualitzarHorariRepartidor(dadesHorari)
+            + modificarDadesUsuari(novesDades)
+            + processarBaixaUsuari()
+        }
+        class GestorComandes <<control>> {
+            + consultarComandesClient(idClient)
+            + processarNovaComanda(dadesComanda, dadesPagament)
+            + confirmarPreparacio(idComanda)
+            + finalitzarPreparacio(idComanda)
+        }
+    }
+    
+    together {
+        class GestorCataleg <<control>> {
+            + consultarPlatsICuiners()
+            + consultarDetallPlat(id)
+            + registrarNouPlat(dadesPlat)
+            + esborrarPlat(idPlat)
+            + modificarDadesPlat(idPlat, novesDades)
+        }
+        class GestorEntregues <<control>> {
+            + consultarComandesPendentsDetall()
+            + assignarRepartidorComanda(idComanda, idRepartidor)
+            + coordinarIniciEnviament(idComanda)
+            + finalitzarEntrega(idComanda)
+        }
+    }
+}
+
+package "Entitats" {
+    together {
+        class Usuari <<entity>> {
+            - id: int
+            - correu: String
+            - contrasenya: String
+            - nomUsuari: String
+            - adrecaPrincipal: String
+            + registrarDadesBase(dadesRegistre)
+            + assignarRol(rolInicial)
+            + comprovarDades(correu, contrasenya)
+            + setDadesPerfil(novesDades)
+            + eliminarRegistre()
+            + getAdreca()
+        }
+        class Client <<entity>> {
+            + activarPlaPremium()
+            + activarMonederPunts()
+        }
+        class Cuiner <<entity>> {
+            + getCuinersDisponibles()
+            + setDisponibilitat(nouEstat)
+            + setHoraTornada(horaTornada)
+        }
+        class Repartidor <<entity>> {
+            + setFrangesHoraries(dadesHorari)
+        }
+    }
+    
+    together {
+        class Comanda <<entity>> {
+            - id: int
+            - estat: String
+            - idRepartidor: int
+            - idClient: int
+            - preuTotal: float
+            + getHistorialComandes(idClient)
+            + crearNovaComanda()
+            + actualitzarEstat(nouEstat)
+            + getComandesPendentsDetall()
+            + setRepartidor(idRepartidor)
+        }
+        class Pagament <<entity>> {
+            + generarRegistrePagament()
+        }
+        class Plat <<entity>> {
+            - idPlat: int
+            - nom: String
+            - preu: float
+            - descripcio: String
+            + getLlistatPlats()
+            + getDetallPlat(id)
+            + crearFitxaPlat(dadesPlat)
+            + eliminarRegistre(idPlat)
+            + setDadesActualitzades(novesDades)
+        }
+    }
+
+    together {
+        class Valoracio <<entity>>
+        class Paypal <<entity>>
+        class TarjetaBancaria <<entity>>
+        class ComandaItem <<entity>>
+        class Allergen <<entity>>
+        class PlatIngredient <<entity>>
+        class Ingredient <<entity>>
+    }
+}
+
+PantallaSessio -down-> GestorUsuaris
+PantallaComanda -down-> GestorComandes
+PantallaCataleg -down-> GestorCataleg
+PantallaGestioCuina -down-> GestorCataleg
+PantallaGestioCuina -down-> GestorUsuaris
+PantallaGestioCuina -down-> GestorComandes
+PantallaGestioEntregues -down-> GestorEntregues
+PantallaGestioEntregues -down-> GestorUsuaris
+
+GestorUsuaris -down-> Usuari
+GestorUsuaris -down-> Client
+GestorUsuaris -down-> Cuiner
+GestorUsuaris -down-> Repartidor
+GestorComandes -down-> Comanda
+GestorComandes -down-> Pagament
+GestorCataleg -down-> Plat
+GestorCataleg -down-> Cuiner
+GestorEntregues -down-> Comanda
+
+GestorComandes -up-> ServeiPagamentExtern
+GestorEntregues -up-> ServeiUbicacioExtern
+GestorEntregues -up-> ServeiNotificacioExtern
+PantallaGestioEntregues -up-> ServeiMapaExtern
+GestorUsuaris -up-> ServeiCorreuExtern
+
+Usuari *-- Client
+Usuari *-- Cuiner
+Usuari *-- Repartidor
+
+Client "1" -- "0..*" Comanda : realitza > \n {màxim 3 actives}
+Comanda "0..*" -- "0..1" Repartidor : assignada a >
+Comanda "1" *-- "1..*" ComandaItem : conté >
+Comanda "1" -- "1" Pagament : genera >
+Comanda "0..1" -- "1" Valoracio : resulta en >
+
+Pagament <|-- Paypal
+Pagament <|-- TarjetaBancaria
+
+Valoracio "0..*" -- "1" Cuiner : puntua >
+Cuiner "1" -- "0..*" Plat : ofereix >
+ComandaItem "0..*" -- "1" Plat : fa referència a >
+Plat "1" -- "0..*" Allergen : conté >
+Plat "1" *-- "1..*" PlatIngredient : compost per >
+PlatIngredient "0..*" -- "1" Ingredient : refereix a >
+
+@enduml

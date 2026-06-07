@@ -1,0 +1,36 @@
+@startuml
+skinparam SequenceMessageAlign center
+skinparam monochrome true
+skinparam shadowing false
+
+actor UsuariNoRegistrat
+boundary PantallaSessio <<boundary>>
+control GestorUsuaris <<control>>
+entity Usuari_Entity <<entity>>
+
+autonumber
+
+== Registrar-se: Creació de nou perfil ==
+UsuariNoRegistrat -> PantallaSessio : registrarUsuari(dadesRegistre)
+activate PantallaSessio
+PantallaSessio -> GestorUsuaris : crearNouCompte(dadesRegistre)
+activate GestorUsuaris
+
+GestorUsuaris -> Usuari_Entity : registrarDadesBase(dadesRegistre)
+activate Usuari_Entity
+Usuari_Entity --> GestorUsuaris : exit
+deactivate Usuari_Entity
+
+GestorUsuaris -> Usuari_Entity : assignarRol(rolInicial)
+activate Usuari_Entity
+Usuari_Entity --> GestorUsuaris : exit
+deactivate Usuari_Entity
+
+GestorUsuaris --> PantallaSessio : exit
+deactivate GestorUsuaris
+
+PantallaSessio -> PantallaSessio : mostrarRegistreCorrecte()
+note right: Mostra la pàgina principal amb l'usuari ja registrat
+deactivate PantallaSessio
+
+@enduml

@@ -1,0 +1,31 @@
+@startuml
+skinparam SequenceMessageAlign center
+skinparam monochrome true
+skinparam shadowing false
+
+actor Cuiner
+boundary PantallaGestioCuina <<boundary>>
+control GestorCataleg <<control>>
+entity Plat <<entity>>
+
+autonumber
+
+== Eliminar plats: Retirar del catàleg ==
+Cuiner -> PantallaGestioCuina : eliminarPlat(idPlat)
+activate PantallaGestioCuina
+PantallaGestioCuina -> GestorCataleg : esborrarPlat(idPlat)
+activate GestorCataleg
+
+GestorCataleg -> Plat : eliminarRegistre(idPlat)
+activate Plat
+Plat --> GestorCataleg : exit
+deactivate Plat
+
+GestorCataleg --> PantallaGestioCuina : exit
+deactivate GestorCataleg
+
+PantallaGestioCuina -> PantallaGestioCuina : mostrarLlistatActualitzat()
+note right: El plat ja no és visible al cercador dels clients
+deactivate PantallaGestioCuina
+
+@enduml

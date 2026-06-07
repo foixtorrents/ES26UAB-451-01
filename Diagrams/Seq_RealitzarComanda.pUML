@@ -1,0 +1,48 @@
+@startuml
+skinparam SequenceMessageAlign center
+skinparam monochrome true
+skinparam shadowing false
+
+actor Client
+boundary PantallaComanda <<boundary>>
+control GestorComandes <<control>>
+entity Comanda <<entity>>
+entity Pagament <<entity>>
+boundary ServeiPagamentExtern <<boundary>>
+
+autonumber
+
+== Realitzar comanda: Checkout i Pagament ==
+Client -> PantallaComanda : confirmarComanda(dadesComanda, dadesPagament)
+activate PantallaComanda
+PantallaComanda -> GestorComandes : processarNovaComanda(dadesComanda, dadesPagament)
+activate GestorComandes
+
+GestorComandes -> ServeiPagamentExtern : autenticarTransaccio(dadesPagament, preuTotal)
+activate ServeiPagamentExtern
+ServeiPagamentExtern --> GestorComandes : exit
+deactivate ServeiPagamentExtern
+
+GestorComandes -> Pagament : generarRegistrePagament()
+activate Pagament
+Pagament --> GestorComandes : exit
+deactivate Pagament
+
+GestorComandes -> Comanda : crearNovaComanda()
+activate Comanda
+Comanda --> GestorComandes : exit
+deactivate Comanda
+
+GestorComandes -> Comanda : actualitzarEstat("Preparant")
+activate Comanda
+Comanda --> GestorComandes : exit
+deactivate Comanda
+
+GestorComandes --> PantallaComanda : exit
+deactivate GestorComandes
+
+PantallaComanda -> PantallaComanda : mostrarComandaConfirmada()
+note right: Mostra el mapa en viu i la barra de progrés
+deactivate PantallaComanda
+
+@enduml

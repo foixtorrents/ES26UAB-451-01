@@ -1,0 +1,50 @@
+@startuml
+skinparam SequenceMessageAlign center
+skinparam monochrome true
+skinparam shadowing false
+
+actor UsuariRegistrat
+boundary PantallaSessio <<boundary>>
+control GestorUsuaris <<control>>
+entity Usuari <<entity>>
+
+autonumber
+
+== Gestionar perfil: Actualització de dades ==
+UsuariRegistrat -> PantallaSessio : actualitzarPerfil(novesDades)
+activate PantallaSessio
+PantallaSessio -> GestorUsuaris : modificarDadesUsuari(novesDades)
+activate GestorUsuaris
+
+GestorUsuaris -> Usuari : setDadesPerfil(novesDades)
+activate Usuari
+Usuari --> GestorUsuaris : exit
+deactivate Usuari
+
+GestorUsuaris --> PantallaSessio : exit
+deactivate GestorUsuaris
+
+PantallaSessio -> PantallaSessio : mostrarPerfilActualitzat()
+note right: Les dades del perfil canvien a totes les vistes
+deactivate PantallaSessio
+
+autonumber 6
+== Eliminar perfil: Baixa definitiva ==
+UsuariRegistrat -> PantallaSessio : eliminarCompte()
+activate PantallaSessio
+PantallaSessio -> GestorUsuaris : processarBaixaUsuari()
+activate GestorUsuaris
+
+GestorUsuaris -> Usuari : eliminarRegistre()
+activate Usuari
+Usuari --> GestorUsuaris : exit
+deactivate Usuari
+
+GestorUsuaris --> PantallaSessio : exit
+deactivate GestorUsuaris
+
+PantallaSessio -> PantallaSessio : mostrarTancamentSessio()
+note right: Les dades s'esborren i la sessió es tanca
+deactivate PantallaSessio
+
+@enduml

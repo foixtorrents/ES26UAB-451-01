@@ -1,0 +1,31 @@
+@startuml
+skinparam SequenceMessageAlign center
+skinparam monochrome true
+skinparam shadowing false
+
+actor Cuiner
+boundary PantallaGestioCuina <<boundary>>
+control GestorCataleg <<control>>
+entity Plat <<entity>>
+
+autonumber
+
+== Editar plats: Actualitzar informació ==
+Cuiner -> PantallaGestioCuina : guardarCanvisPlat(idPlat, novesDades)
+activate PantallaGestioCuina
+PantallaGestioCuina -> GestorCataleg : modificarDadesPlat(idPlat, novesDades)
+activate GestorCataleg
+
+GestorCataleg -> Plat : setDadesActualitzades(novesDades)
+activate Plat
+Plat --> GestorCataleg : exit
+deactivate Plat
+
+GestorCataleg --> PantallaGestioCuina : exit
+deactivate GestorCataleg
+
+PantallaGestioCuina -> PantallaGestioCuina : mostrarCanvisGuardats()
+note right: La fitxa del plat mostra la nova informació
+deactivate PantallaGestioCuina
+
+@enduml

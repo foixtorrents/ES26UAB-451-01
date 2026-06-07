@@ -1,0 +1,31 @@
+@startuml
+skinparam SequenceMessageAlign center
+skinparam monochrome true
+skinparam shadowing false
+
+actor Cuiner
+boundary PantallaGestioCuina <<boundary>>
+control GestorCataleg <<control>>
+entity Plat <<entity>>
+
+autonumber
+
+== Afegir plats: Creació al catàleg ==
+Cuiner -> PantallaGestioCuina : afegirNouPlat(dadesPlat)
+activate PantallaGestioCuina
+PantallaGestioCuina -> GestorCataleg : registrarNouPlat(dadesPlat)
+activate GestorCataleg
+
+GestorCataleg -> Plat : crearFitxaPlat(dadesPlat)
+activate Plat
+Plat --> GestorCataleg : exit
+deactivate Plat
+
+GestorCataleg --> PantallaGestioCuina : exit
+deactivate GestorCataleg
+
+PantallaGestioCuina -> PantallaGestioCuina : mostrarPlatCreat()
+note right: El nou plat apareix al llistat de la cuina
+deactivate PantallaGestioCuina
+
+@enduml
