@@ -1,0 +1,39 @@
+@startuml
+skinparam SequenceMessageAlign center
+skinparam monochrome true
+skinparam shadowing false
+
+actor Repartidor
+boundary PantallaGestioEntregues <<boundary>>
+control GestorEntregues <<control>>
+entity Comanda <<entity>>
+boundary ServeiNotificacioExtern <<boundary>>
+
+autonumber
+
+== Marcar com a lliurat ==
+
+Repartidor -> PantallaGestioEntregues : comandaEntregada()
+activate PantallaGestioEntregues
+PantallaGestioEntregues -> GestorEntregues : finalitzarEntrega(idComanda)
+activate GestorEntregues
+
+GestorEntregues -> Comanda : actualitzarEstat("Lliurat")
+activate Comanda
+Comanda --> GestorEntregues : exit
+deactivate Comanda
+
+GestorEntregues -> ServeiNotificacioExtern : notificarEntregaLliurada(idComanda)
+activate ServeiNotificacioExtern
+ServeiNotificacioExtern --> GestorEntregues : exit
+deactivate ServeiNotificacioExtern
+note right of GestorEntregues: Avisa al client associat a la comanda.
+
+GestorEntregues --> PantallaGestioEntregues : exit
+deactivate GestorEntregues
+
+PantallaGestioEntregues -> PantallaGestioEntregues : mostrarPantallaExit()
+note right: Mostra missatge "Comanda lliurada correctament!"
+deactivate PantallaGestioEntregues
+
+@enduml

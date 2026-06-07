@@ -1,0 +1,63 @@
+@startuml
+skinparam SequenceMessageAlign center
+skinparam monochrome true
+skinparam shadowing false
+
+actor Repartidor
+boundary PantallaGestioEntregues <<boundary>>
+control GestorEntregues <<control>>
+entity Comanda <<entity>>
+boundary ServeiUbicacioExtern <<boundary>>
+
+autonumber
+
+== Acceptar comanda ==
+
+Repartidor -> PantallaGestioEntregues : acceptarComanda(id)
+activate PantallaGestioEntregues
+PantallaGestioEntregues -> GestorEntregues : assignarRepartidorComanda(idComanda, idRepartidor)
+activate GestorEntregues
+
+GestorEntregues -> Comanda : setRepartidor(idRepartidor)
+activate Comanda
+Comanda --> GestorEntregues : exit
+deactivate Comanda
+
+GestorEntregues -> Comanda : actualitzarEstat("Acceptada")
+activate Comanda
+Comanda --> GestorEntregues : exit
+deactivate Comanda
+
+GestorEntregues --> PantallaGestioEntregues : exit
+deactivate GestorEntregues
+
+PantallaGestioEntregues -> PantallaGestioEntregues : mostrarConfirmacioAceptacio()
+note right: Comanda passa visualment a la pestanya\n'Actives' i mostra missatge "Comanda acceptada"
+deactivate PantallaGestioEntregues
+
+== Iniciar enviament ==
+
+Repartidor -> PantallaGestioEntregues : iniciarEnviament(id)
+activate PantallaGestioEntregues
+PantallaGestioEntregues -> GestorEntregues : coordinarIniciEnviament(idComanda)
+activate GestorEntregues
+
+GestorEntregues -> Comanda : actualitzarEstat("En camí")
+activate Comanda
+Comanda --> GestorEntregues : exit
+deactivate Comanda
+
+GestorEntregues -> ServeiUbicacioExtern : activarStreamPosicioGPS(idComanda, idRepartidor, idClient)
+activate ServeiUbicacioExtern
+ServeiUbicacioExtern --> GestorEntregues : exit
+deactivate ServeiUbicacioExtern
+note right of GestorEntregues: Inicia l'stream de posició GPS\nvisible al client en temps real.
+
+GestorEntregues --> PantallaGestioEntregues : exit
+deactivate GestorEntregues
+
+PantallaGestioEntregues -> PantallaGestioEntregues : mostrarPestanyaActivesDetall()
+note right: Mostra missatge "Enviament Iniciat"
+deactivate PantallaGestioEntregues
+
+@enduml
